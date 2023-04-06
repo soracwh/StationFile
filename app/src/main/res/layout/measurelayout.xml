@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="反措内容："
+        android:textSize="18dp">
+    </TextView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1、#1主变精益化整治。#1主变220kV、110kV中性点避雷器、间隙流变精益化整治，避雷器开盖检查"
+        android:id="@+id/content"
+        android:paddingBottom="5dp">
+    </TextView>
+
+
+</LinearLayout>
