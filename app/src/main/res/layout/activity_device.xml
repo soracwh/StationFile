@@ -58,7 +58,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp">
             <LinearLayout
-                android:layout_width="180dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
@@ -70,7 +70,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="主变110kV开关"
+                    android:text="主变110kV开关111111"
                     android:id="@+id/deviceName"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/white">
@@ -192,12 +192,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <!--230-->
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="230dp"
+                android:layout_height="400dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/repair_area">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -220,22 +222,23 @@
                         android:textStyle="bold">
                     </TextView>
                 </LinearLayout>
-
+<!--180-->
                 <ListView
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="350dp"
                     android:id="@+id/imformationList1">
                 </ListView>
 
             </LinearLayout>
 
-            <!--缺陷-->
+            <!--缺陷200-->
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/defect_area">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -259,15 +262,15 @@
                     </TextView>
                 </LinearLayout>
 
-
+                <!--150-->
                 <ListView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="250dp"
                     android:id="@+id/imformationList2">
                 </ListView>
             </LinearLayout>
 
-            <!--反措-->
+            <!--反措150-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
@@ -299,9 +302,10 @@
                 </LinearLayout>
 
 
+                <!--120-->
                 <ListView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="170dp"
                     android:id="@+id/imformationList3">
                 </ListView>
             </LinearLayout>

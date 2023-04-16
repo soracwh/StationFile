@@ -1,7 +1,5 @@
 package com.example.stationfile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stationfile.adapter.StationAdapter;
 import com.example.stationfile.entity.Simplified;
@@ -35,6 +35,7 @@ public class TypeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_type);
         Intent intent = this.getIntent();
         String s1 = intent.getStringExtra("type");
+        String intervalId = intent.getStringExtra("interval");
         String typeId = intent.getStringExtra("id");
         TextView textView = findViewById(R.id.intervalName);
         textView.setText(s1);
@@ -48,7 +49,7 @@ public class TypeActivity extends AppCompatActivity {
 
         MyDBHelper myDbHelper = new MyDBHelper(this);
         myDbHelper.openDataBase();
-        data = myDbHelper.queryDeviceByTypeId(Integer.parseInt(typeId));
+        data = myDbHelper.queryDeviceByTypeId(Integer.parseInt(typeId),Integer.parseInt(intervalId));
 
 
         deviceList = findViewById(R.id.deviceList);

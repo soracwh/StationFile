@@ -1,8 +1,5 @@
 package com.example.stationfile;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.stationfile.adapter.StationAdapter;
 import com.example.stationfile.entity.Simplified;
@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     Button search, scan,ddd;
 
     EditText text;
-    private final String[] name = {"220kV黄石变","220kV渔藤变","220kV丽呈变","220kV1变","220kV2变"};
     List<Simplified> data = null;
 
     public static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -121,7 +120,12 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 /*Toast.makeText(this, "扫描内容:" + result.getContents(), Toast.LENGTH_LONG).show();*/
                 String s = result.getContents();
-                String[] s1 = s.split(":");
+                String r = s.substring(s.length()-6);
+                Log.e("ShadyPi", "getView: "+r);
+                Intent intent1 = new Intent(MainActivity.this, DeviceActivity.class);
+                intent1.putExtra("SD_id",r);
+                startActivity(intent1);
+                /*String[] s1 = s.split(":");
                 switch(s1[0]){
                     case "interval":
                         Intent intent = new Intent(MainActivity.this, IntervalActivity.class);
@@ -133,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                         intent1.putExtra("id",s1[1]);
                         startActivity(intent1);
                         break;
-                }
+                }*/
 /*                Intent intent = new Intent(MainActivity.this, DeviceActivity.class);
                 intent.putExtra("id",result.getContents());
                 startActivity(intent);*/

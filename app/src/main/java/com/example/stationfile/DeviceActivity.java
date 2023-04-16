@@ -1,7 +1,5 @@
 package com.example.stationfile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,6 +10,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.stationfile.adapter.DefectAdapter;
 import com.example.stationfile.adapter.MeasureAdapter;
 import com.example.stationfile.adapter.RepairImformationAdapter;
@@ -19,7 +19,6 @@ import com.example.stationfile.entity.Defect;
 import com.example.stationfile.entity.Device;
 import com.example.stationfile.entity.Measure;
 import com.example.stationfile.entity.RepairRecord;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +38,22 @@ public class DeviceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device);
         Intent intent = this.getIntent();
-
-        View view = findViewById(R.id.backcolor);
-        String deviceId = intent.getStringExtra("id");
         MyDBHelper myDbHelper = new MyDBHelper(this);
         myDbHelper.openDataBase();
-        Device device = myDbHelper.queryDeviceById(Integer.parseInt(deviceId));
+
+        View view = findViewById(R.id.backcolor);
+        Device device = new Device();
+        int deviceId = 0;
+
+        if(intent.getStringExtra("SD_id")!=null){
+            device = myDbHelper.queryDeviceBySDId(Integer.parseInt(intent.getStringExtra("SD_id")));
+            deviceId = device.getId();
+        }else{
+             deviceId = Integer.parseInt(intent.getStringExtra("id"));
+             device = myDbHelper.queryDeviceById(deviceId);
+        }
+
+        /*Device device = myDbHelper.queryDeviceById(deviceId);*/
         String s1 = device.getName();
         String station = myDbHelper.queryByStationId(device.getStationId()).getName();
         String interval = myDbHelper.queryByIntervalId(device.getIntervalId()).getName();
@@ -57,7 +66,7 @@ public class DeviceActivity extends AppCompatActivity {
                 view.setBackgroundColor(Color.parseColor("#E31809"));
                 break;
             default:
-                view.setBackgroundColor(Color.parseColor("#03A9F4"));
+                view.setBackgroundColor(Color.parseColor("#70F176"));
                 break;
         }
 
@@ -72,20 +81,25 @@ public class DeviceActivity extends AppCompatActivity {
 
         /*extracted(device);*/
 
-        data = myDbHelper.queryRepairByDeviceId(Integer.parseInt(deviceId));
+        data = myDbHelper.queryRepairByDeviceId(deviceId);
         Log.e("ShadyPi", "getRecord: "+data.size());
 
         /*缺陷*/
-        defects = myDbHelper.queryDefectByDeviceId(Integer.parseInt(deviceId));
-        ListView defectList = findViewById(R.id.imformationList2);
-        DefectAdapter defectAdapter = new DefectAdapter(defects,DeviceActivity.this);
-        defectList.setAdapter(defectAdapter);
+        defects = myDbHelper.queryDefectByDeviceId(deviceId);
+        if(defects==null||defects.size()==0){
+            View defectArea = findViewById(R.id.defect_area);
+            defectArea.setVisibility(View.GONE);
+        }else{
+            ListView defectList = findViewById(R.id.imformationList2);
+            DefectAdapter defectAdapter = new DefectAdapter(defects,DeviceActivity.this);
+            defectList.setAdapter(defectAdapter);
+        }
 
         ListView imformationList1 = findViewById(R.id.imformationList1);
         RepairImformationAdapter adapter = new RepairImformationAdapter(data,DeviceActivity.this);
         imformationList1.setAdapter(adapter);
         /*反措*/
-        measures = myDbHelper.queryMeasureByDeviceId(Integer.parseInt(deviceId));
+        measures = myDbHelper.queryMeasureByDeviceId(deviceId);
         if(measures==null||measures.size()==0){
             View measureArea = findViewById(R.id.measure_area);
             measureArea.setVisibility(View.GONE);
@@ -96,17 +110,23 @@ public class DeviceActivity extends AppCompatActivity {
         }
 
 
+        int count1 = 0;
+        for (int i = 0; i < measures.size(); i++) {
+            if(measures.get(i).getFlag()==0){
+                count1++;
+            }
+        }
         TextView measureNum = findViewById(R.id.measure_num);
-        measureNum.setText(""+measures.size());
+        measureNum.setText(""+count1);
 
-        int count = 0;
+        int count2 = 0;
         for (int i = 0; i < defects.size(); i++) {
             if(defects.get(i).getFlag()==0){
-                count++;
+                count2++;
             }
         }
         TextView defectNum = findViewById(R.id.defect_num);
-        defectNum.setText(""+count);
+        defectNum.setText(""+count2);
 
         //返回
         back = findViewById(R.id.back);

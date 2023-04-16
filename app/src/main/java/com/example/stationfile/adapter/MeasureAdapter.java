@@ -1,6 +1,7 @@
 package com.example.stationfile.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,16 @@ public class MeasureAdapter extends BaseAdapter {
         }else{
             viewHolder = (ViewHolder) view.getTag();
         }
+        /*是否消缺*/
+        if(measures.get(i).getFlag()==0){
+            viewHolder.completeLabel.setText("  未完成  ");
+            viewHolder.completeLabel.setBackground(view.getResources().getDrawable(R.drawable.complete_text));
+            viewHolder.completeLabel.setTextColor(Color.parseColor("#E31809"));
+        }else{
+            viewHolder.completeLabel.setText("  已完成  ");
+            viewHolder.completeLabel.setBackground(view.getResources().getDrawable(R.drawable.shape_text));
+            viewHolder.completeLabel.setTextColor(Color.parseColor("#03A9F4"));
+        }
         viewHolder.content.setText(measures.get(i).getContent());
         return view;
     }
@@ -53,8 +64,10 @@ public class MeasureAdapter extends BaseAdapter {
     class ViewHolder{
         TextView content;
 
+        TextView completeLabel;
         public ViewHolder(View view) {
             this.content = view.findViewById(R.id.content);
+            this.completeLabel = view.findViewById(R.id.complete_label);
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.example.stationfile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stationfile.adapter.StationAdapter;
 import com.example.stationfile.entity.Simplified;
@@ -65,6 +65,7 @@ public class IntervalActivity extends AppCompatActivity {
                 String s1 = data.get(i).getName();
                 int s2 = data.get(i).getId();
                 intent2.putExtra("type",s1);
+                intent2.putExtra("interval",intervalId);
                 intent2.putExtra("id", String.valueOf(s2));
                 startActivity(intent2);
             }
