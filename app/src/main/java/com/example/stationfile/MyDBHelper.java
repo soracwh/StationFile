@@ -405,6 +405,9 @@ public class MyDBHelper  extends SQLiteOpenHelper {
             measure.setId(cursor.getInt(0));
             measure.setContent(cursor.getString(1));
             measure.setFlag(cursor.getInt(3));
+            measure.setTarget(cursor.getString(4));
+            measure.setPerson(cursor.getString(5));
+            measure.setDate(cursor.getString(6));
             res.add(measure);
         }
         return res;

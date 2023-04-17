@@ -52,10 +52,15 @@ public class MeasureAdapter extends BaseAdapter {
             viewHolder.completeLabel.setText("  未完成  ");
             viewHolder.completeLabel.setBackground(view.getResources().getDrawable(R.drawable.complete_text));
             viewHolder.completeLabel.setTextColor(Color.parseColor("#E31809"));
+            viewHolder.iv.setVisibility(View.GONE);
         }else{
             viewHolder.completeLabel.setText("  已完成  ");
             viewHolder.completeLabel.setBackground(view.getResources().getDrawable(R.drawable.shape_text));
             viewHolder.completeLabel.setTextColor(Color.parseColor("#03A9F4"));
+            viewHolder.iv.setVisibility(View.VISIBLE);
+            viewHolder.person.setText(measures.get(i).getPerson());
+            viewHolder.date.setText(measures.get(i).getDate());
+            viewHolder.target.setText(measures.get(i).getTarget());
         }
         viewHolder.content.setText(measures.get(i).getContent());
         return view;
@@ -63,11 +68,18 @@ public class MeasureAdapter extends BaseAdapter {
 
     class ViewHolder{
         TextView content;
-
         TextView completeLabel;
+        TextView target;
+        TextView date;
+        TextView person;
+        View iv;
         public ViewHolder(View view) {
             this.content = view.findViewById(R.id.content);
             this.completeLabel = view.findViewById(R.id.complete_label);
+            this.target = view.findViewById(R.id.target);
+            this.person = view.findViewById(R.id.person);
+            this.date = view.findViewById(R.id.date);
+            this.iv = view.findViewById(R.id.iv);
         }
     }
 }
