@@ -39,7 +39,7 @@ public class RepairImformationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        RepairImformationAdapter.ViewHolder viewHolder;
+        ViewHolder viewHolder;
         if(view == null){
             view = layoutInflater.inflate(R.layout.imformationlayout,null,false);
             viewHolder = new ViewHolder(view);

@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,8 +30,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     ListView stationList = null;
-    Button search, scan,ddd;
-
+    Button search, scan, add;
     EditText text;
     List<Simplified> data = null;
 
@@ -50,11 +54,10 @@ public class MainActivity extends AppCompatActivity {
         search = findViewById(R.id.search);
         scan = findViewById(R.id.scan);
         text = findViewById(R.id.edit_text);
+        add = findViewById(R.id.fab);
 
         verifyStoragePermissions();
-
         /*SQLiteStudioService.instance().start(this);*/
-
 /*        MyDBHelper myDBHelper = new MyDBHelper(MainActivity.this);
         data = myDBHelper.queryAllStation();
         Log.e("ShadyPi", "getView: "+myDBHelper.queryAllStation().size());*/
@@ -68,15 +71,6 @@ public class MainActivity extends AppCompatActivity {
         myDbHelper.openDataBase();
 
         data = myDbHelper.queryAllStation();
-        /*Log.e("ShadyPi", "getView: "+123333);*/
-
-/*        for (int i = 0; i < name.length; i++) {
-            Simplified simplified = new Simplified();
-            simplified.setId(i);
-            simplified.setName(name[i]);
-            data.add(simplified);
-        }*/
-
         init();
 
         Intent intent = new Intent(this, StationActivity.class);
@@ -91,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
         //条件查询
         search.setOnClickListener(v -> {
-
             String s = String.valueOf(text.getText());
             data = myDbHelper.queryByStationName(s);
             init();
@@ -102,10 +95,15 @@ public class MainActivity extends AppCompatActivity {
             IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
             intentIntegrator.initiateScan();
         });
+
+        add.setOnClickListener(v -> {
+
+        });
+
 /*        ddd = findViewById(R.id.ddd);
-        ddd.setOnClickListener(v -> {
-            MyDBHelper myDBHelper = new MyDBHelper(MainActivity.this,"electric.db",null,1);
-            Log.e("ShadyPi", "getView: "+myDBHelper.queryAllStation().get(0).getName());
+          ddd.setOnClickListener(v -> {
+          MyDBHelper myDBHelper = new MyDBHelper(MainActivity.this,"electric.db",null,1);
+          Log.e("ShadyPi", "getView: "+myDBHelper.queryAllStation().get(0).getName());
         });*/
 
     }
@@ -148,8 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void init(){
 /*
-
-        if(data!=null||data.size()!=0){
+    if(data!=null||data.size()!=0){
             data.clear();
         }
         //数据库初始化

@@ -40,10 +40,10 @@ public class DefectAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup parent) {
-        DefectAdapter.ViewHolder viewHolder;
+        ViewHolder viewHolder;
         if(view == null){
             view = layoutInflater.inflate(R.layout.defectlayout,null,false);
-            viewHolder = new DefectAdapter.ViewHolder(view);
+            viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) view.getTag();

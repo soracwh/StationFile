@@ -39,10 +39,10 @@ public class MeasureAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup parent) {
-        MeasureAdapter.ViewHolder viewHolder;
+        ViewHolder viewHolder;
         if(view == null){
             view = layoutInflater.inflate(R.layout.measurelayout,null,false);
-            viewHolder = new MeasureAdapter.ViewHolder(view);
+            viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) view.getTag();
@@ -60,9 +60,9 @@ public class MeasureAdapter extends BaseAdapter {
             viewHolder.iv.setVisibility(View.VISIBLE);
             viewHolder.person.setText(measures.get(i).getPerson());
             viewHolder.date.setText(measures.get(i).getDate());
-            viewHolder.target.setText(measures.get(i).getTarget());
         }
         viewHolder.content.setText(measures.get(i).getContent());
+        viewHolder.target.setText(measures.get(i).getTarget());
         return view;
     }
 
