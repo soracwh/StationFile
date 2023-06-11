@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.stationfile.entity.Defect;
 import com.example.stationfile.entity.Device;
+import com.example.stationfile.entity.Interval;
 import com.example.stationfile.entity.Measure;
 import com.example.stationfile.entity.RepairRecord;
 import com.example.stationfile.entity.Simplified;
@@ -45,7 +46,8 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         } else {
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
-            this.getReadableDatabase();
+            //this.getReadableDatabase();
+            this.getWritableDatabase();
             try {
                 copyDataBase();
             } catch (IOException e) {
@@ -58,7 +60,8 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         SQLiteDatabase checkDB = null;
         try {
             String myPath = DB_PATH + DB_NAME;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            //checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
         } catch (SQLiteException e) {
            //database does't exist yet.
         }
@@ -135,7 +138,8 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         //Open the database
         String myPath = DB_PATH + DB_NAME;
         /*String myPath = myContext.getApplicationInfo().dataDir+DB_NAME;*/
-        db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+        //db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+        db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
 /*        Log.e("ShadyPi", "getView: ");
         Log.e("ShadyPi", "getView: "+myContext.getFilesDir().getPath());*/
     }
@@ -149,12 +153,57 @@ public class MyDBHelper  extends SQLiteOpenHelper {
 
 
 
-    public boolean insertData(String name,String level){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name",name);
-        contentValues.put("level",level);
-        long res = db.insert("station",null,contentValues);
-        return res!=0?true:false;
+    //db.execSQL("insert into person (name, phone, money) values (?, ?, ?);", new Object[]{"张三", 15987461, 75000});
+    public void insertStation(String name){
+        String level = "";
+        if(name.length()>6){
+            level = name.substring(0,5);
+        }
+        db.execSQL("insert into station (name,level) values (?,?)",new Object[] {name,level});
+    }
+
+    public void deleteStation(int id){
+        db.execSQL("delete from station where id = ?", new Object[] {id});
+    }
+
+    public void updateStation(Simplified s, String newName){
+        db.execSQL("update station set name = ? where id  = ?", new Object[] {newName,s.getId()});
+    }
+
+    public Interval queryAllByIntervalId(int id){
+        Interval interval =new Interval();
+        String sql_sel = "SELECT * FROM interval WHERE id = "+id;
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery(sql_sel,null);
+        while (cursor.moveToNext()){
+            interval.setIntervalId(cursor.getInt(0));
+            interval.setStationId(cursor.getInt(1));
+            interval.setName(cursor.getString(2));
+        }
+        return interval;
+    }
+    public void insertInterval(Interval interval){
+        db.execSQL("insert into interval (station_id,name) values (?,?)",new Object[] {interval.getStationId(),interval.getName()});
+    }
+    public void deleteInterval(int id){
+        db.execSQL("delete from interval where id = ?", new Object[] {id});
+    }
+    public void updateInterval(Interval interval, String newName){
+        db.execSQL("update interval set name = ? where id  = ?", new Object[] {newName,interval.getIntervalId()});
+
+    }
+
+
+    public List<Simplified> queryAllType(){
+        List<Simplified> res = new ArrayList<>();
+        String sql_sel = "select  t.id, t.name from type ";
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery(sql_sel,null);
+        while (cursor.moveToNext()){
+            Simplified simplified = new Simplified();
+            simplified.setId(cursor.getInt(0));
+            simplified.setName(cursor.getString(1));
+            res.add(simplified);
+        }
+        return res;
     }
 
 
@@ -291,32 +340,6 @@ public class MyDBHelper  extends SQLiteOpenHelper {
             device.setIntervalId(cursor.getInt(2));
             device.setName(cursor.getString(4));
             device.setState(cursor.getInt(13));
-            /*device.setSupplier(cursor.getString(5));
-            device.setBasicInfo(cursor.getString(6));
-            device.setTime_start(cursor.getString(7));
-            device.setTime_last(cursor.getString(8));
-            device.setBlackSpot(cursor.getString(9));
-            device.setDefect(cursor.getString(10));
-            device.setImDefect(cursor.getInt(11));
-            device.setNoDefect(cursor.getInt(12));
-            device.setGreater(cursor.getInt(13));
-            device.setRepair(cursor.getString(14));
-            device.setOtherRepair(cursor.getString(15));
-            device.setSwTime(cursor.getInt(16));
-            device.setTransfer(cursor.getString(17));
-            device.setTransToEarth(cursor.getString(18));
-            device.setOil(cursor.getString(19));
-            device.setTransTrip(cursor.getString(20));
-            device.setTimeRepair(cursor.getString(21));
-            device.setContentRepair(cursor.getString(22));
-            device.setPerson(cursor.getString(23));
-            device.setFile1(cursor.getString(24));
-            device.setFile2(cursor.getString(25));
-            device.setFile3(cursor.getString(26));
-            device.setFile4(cursor.getString(27));
-            device.setCheckAccept(cursor.getString(28));
-            device.setExPerson(cursor.getString(29));
-            device.setStartPerson(cursor.getString(30));*/
         }
         return device;
     }
@@ -331,32 +354,6 @@ public class MyDBHelper  extends SQLiteOpenHelper {
             device.setIntervalId(cursor.getInt(2));
             device.setName(cursor.getString(4));
             device.setState(cursor.getInt(13));
-            /*device.setSupplier(cursor.getString(5));
-            device.setBasicInfo(cursor.getString(6));
-            device.setTime_start(cursor.getString(7));
-            device.setTime_last(cursor.getString(8));
-            device.setBlackSpot(cursor.getString(9));
-            device.setDefect(cursor.getString(10));
-            device.setImDefect(cursor.getInt(11));
-            device.setNoDefect(cursor.getInt(12));
-            device.setGreater(cursor.getInt(13));
-            device.setRepair(cursor.getString(14));
-            device.setOtherRepair(cursor.getString(15));
-            device.setSwTime(cursor.getInt(16));
-            device.setTransfer(cursor.getString(17));
-            device.setTransToEarth(cursor.getString(18));
-            device.setOil(cursor.getString(19));
-            device.setTransTrip(cursor.getString(20));
-            device.setTimeRepair(cursor.getString(21));
-            device.setContentRepair(cursor.getString(22));
-            device.setPerson(cursor.getString(23));
-            device.setFile1(cursor.getString(24));
-            device.setFile2(cursor.getString(25));
-            device.setFile3(cursor.getString(26));
-            device.setFile4(cursor.getString(27));
-            device.setCheckAccept(cursor.getString(28));
-            device.setExPerson(cursor.getString(29));
-            device.setStartPerson(cursor.getString(30));*/
         }
         return device;
     }

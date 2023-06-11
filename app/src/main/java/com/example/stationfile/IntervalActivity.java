@@ -19,7 +19,6 @@ import java.util.List;
 
 public class IntervalActivity extends AppCompatActivity {
 
-    private final String[] type= {"闸刀","开关","电流互感器","避雷器"};
     List<Simplified> data = new ArrayList<>();
     TextView singleName = null;
 
@@ -27,6 +26,8 @@ public class IntervalActivity extends AppCompatActivity {
     Button back,search = null;
 
     ListView TypeList = null;
+
+    private RefulshStateListenter refulshLister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +37,10 @@ public class IntervalActivity extends AppCompatActivity {
         String s1 = intent.getStringExtra("interval");
         String intervalId = intent.getStringExtra("id");
 
-/*        for (int i = 0; i < type.length; i++) {
-            Simplified simplified = new Simplified();
-            simplified.setId(i);
-            simplified.setName(type[i]);
-            data.add(simplified);
-        }*/
 
         MyDBHelper myDbHelper = new MyDBHelper(this);
         myDbHelper.openDataBase();
-        data = myDbHelper.queryAllTypeByIntervalId(Integer.parseInt(intervalId));
+        data = myDbHelper.queryAllType();
         Simplified simplified = myDbHelper.queryByIntervalId(Integer.parseInt(intervalId));
 
         if (s1==null|| s1.equals("")){
@@ -59,16 +54,14 @@ public class IntervalActivity extends AppCompatActivity {
         init();
 
         Intent intent2 = new Intent(this, TypeActivity.class);
-        TypeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String s1 = data.get(i).getName();
-                int s2 = data.get(i).getId();
-                intent2.putExtra("type",s1);
-                intent2.putExtra("interval",intervalId);
-                intent2.putExtra("id", String.valueOf(s2));
-                startActivity(intent2);
-            }
+
+        TypeList.setOnItemClickListener((adapterView, view, i, l) -> {
+            String s11 = data.get(i).getName();
+            int s2 = data.get(i).getId();
+            intent2.putExtra("type", s11);
+            intent2.putExtra("intervalId",intervalId);
+            intent2.putExtra("typeId", String.valueOf(s2));
+            startActivity(intent2);
         });
 
         //返回
@@ -90,40 +83,8 @@ public class IntervalActivity extends AppCompatActivity {
     private void init(){
 
         //渲染页面
-        StationAdapter myAdapter = new StationAdapter(data,IntervalActivity.this);
+        StationAdapter myAdapter = new StationAdapter(data,IntervalActivity.this, refulshLister);
         TypeList.setAdapter(myAdapter);
     }
 
-
-   /* private class deviceAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return device.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return device[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = View.inflate(IntervalActivity.this,R.layout.stationlayout,null);
-            singleName = view.findViewById(R.id.name);
-            singleName.setText(device[position]);
-*//*            Intent intent = new Intent(IntervalActivity.this, StationActivity.class);
-            singleName.setOnClickListener(v -> {
-                String s1 = singleName.getText().toString();
-                intent.putExtra("station",s1);
-                startActivity(intent);
-            });*//*
-            return view;
-        }
-    }*/
 }

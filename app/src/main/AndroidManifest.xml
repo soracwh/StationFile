@@ -20,6 +20,9 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="33">
         <activity
+            android:name=".AddDeviceActivity"
+            android:exported="false" />
+        <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />

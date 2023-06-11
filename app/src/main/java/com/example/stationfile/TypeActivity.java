@@ -29,26 +29,25 @@ public class TypeActivity extends AppCompatActivity {
 
     EditText text;
 
+    private RefulshStateListenter refulshLister;
+
+    MyDBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type);
         Intent intent = this.getIntent();
         String s1 = intent.getStringExtra("type");
-        String intervalId = intent.getStringExtra("interval");
-        String typeId = intent.getStringExtra("id");
+        String intervalId = intent.getStringExtra("intervalId");
+        String typeId = intent.getStringExtra("typeId");
         TextView textView = findViewById(R.id.intervalName);
         textView.setText(s1);
 
-/*        for (int i = 0; i < device.length; i++) {
-            Simplified simplified = new Simplified();
-            simplified.setId(i);
-            simplified.setName(device[i]);
-            data.add(simplified);
-        }*/
 
         MyDBHelper myDbHelper = new MyDBHelper(this);
         myDbHelper.openDataBase();
+        dbHelper = myDbHelper;
         data = myDbHelper.queryDeviceByTypeId(Integer.parseInt(typeId),Integer.parseInt(intervalId));
 
 
@@ -83,7 +82,7 @@ public class TypeActivity extends AppCompatActivity {
     }
 
     private void init(){
-        StationAdapter myAdapter = new StationAdapter(data,TypeActivity.this);
+        StationAdapter myAdapter = new StationAdapter(data,TypeActivity.this,refulshLister);
         deviceList.setAdapter(myAdapter);
     }
 }

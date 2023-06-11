@@ -5,21 +5,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.example.stationfile.R;
+import com.example.stationfile.RefulshStateListenter;
 import com.example.stationfile.entity.Simplified;
 
 import java.util.List;
 
-public class StationAdapter extends BaseAdapter {
+public class StationAdapter extends BaseAdapter implements View.OnClickListener{
 
     private List<Simplified> data;
     private LayoutInflater layoutInflater;
 
-    public StationAdapter(List<Simplified> data, Context context) {
+    private RefulshStateListenter refulshLister;
+
+    public StationAdapter(List<Simplified> data, Context context, RefulshStateListenter refulshLister) {
         this.data = data;
         layoutInflater = LayoutInflater.from(context);
+        this.refulshLister = refulshLister;
     }
 
     @Override
@@ -50,15 +56,29 @@ public class StationAdapter extends BaseAdapter {
 
         viewHolder.singleName.setText(data.get(i).getName());
         viewHolder.s_id.setText(String.valueOf(data.get(i).getId()));
+        viewHolder.delete.setOnClickListener(v -> {
+            refulshLister.refush(data.get(i));
+        });
+        viewHolder.update.setOnClickListener(v -> {
+            refulshLister.update(data.get(i));
+        });
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
     class ViewHolder{
         TextView singleName;
         TextView s_id;
+        ImageView delete,update;
         public ViewHolder(View v){
             singleName = v.findViewById(R.id.name);
             s_id = v.findViewById(R.id.sid);
+            delete = v.findViewById(R.id.delete);
+            update = v.findViewById(R.id.update);
         }
     }
 }

@@ -4,7 +4,6 @@ public class Interval {
     int stationId;
     int intervalId;
     String name;
-    String level;
 
     public Integer getStationId() {
         return stationId;
@@ -18,9 +17,6 @@ public class Interval {
         return name;
     }
 
-    public String getLevel() {
-        return level;
-    }
 
     public void setStationId(Integer stationId) {
         this.stationId = stationId;
@@ -34,7 +30,4 @@ public class Interval {
         this.name = name;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
-    }
 }

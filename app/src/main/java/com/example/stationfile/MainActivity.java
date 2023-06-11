@@ -1,15 +1,12 @@
 package com.example.stationfile;
 
 import android.Manifest;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,22 +14,31 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.stationfile.adapter.StationAdapter;
+import com.example.stationfile.dialog.DeleteDialog;
+import com.example.stationfile.dialog.StationDialog;
+import com.example.stationfile.dialog.UpdateDialog;
 import com.example.stationfile.entity.Simplified;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements StationDialog.NoticeDialogListener{
 
     ListView stationList = null;
-    Button search, scan, add;
+    Button search, scan;
+    FloatingActionButton add;
     EditText text;
     List<Simplified> data = null;
+    MyDBHelper dbHelper;
+    RefulshStateListenter  refulshLister;
 
     public static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -63,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e("ShadyPi", "getView: "+myDBHelper.queryAllStation().size());*/
 
         MyDBHelper myDbHelper = new MyDBHelper(this);
+        dbHelper = myDbHelper;
         try {
             myDbHelper.createDataBase();
         } catch (IOException ioe) {
@@ -70,8 +77,31 @@ public class MainActivity extends AppCompatActivity {
         }
         myDbHelper.openDataBase();
 
-        data = myDbHelper.queryAllStation();
-        init();
+        /*
+        * adpter、dialog、activity通过接口回调函数通讯*/
+        refulshLister = new RefulshStateListenter() {
+            @Override
+            public void refush(Simplified s) {
+                DeleteDialog deleteDialog = new DeleteDialog(refulshLister,s);
+                deleteDialog.show(getSupportFragmentManager(),"delete");
+            }
+            @Override
+            public void dialogCallback(Simplified s) {
+                dbHelper.deleteStation(s.getId());
+                init();
+            }
+            @Override
+            public void update(Simplified s) {
+                UpdateDialog updateDialog = new UpdateDialog("修改",refulshLister,s);
+                updateDialog.show(getSupportFragmentManager(),"update");
+            }
+
+            @Override
+            public void updateCallback(Simplified s,String newName) {
+                dbHelper.updateStation(s,newName);
+                init();
+            }
+        };
 
         Intent intent = new Intent(this, StationActivity.class);
         stationList.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -97,16 +127,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         add.setOnClickListener(v -> {
-
+            StationDialog stationDialog = new StationDialog("增加变电站");
+            stationDialog.show(this.getSupportFragmentManager(),null);
         });
 
-/*        ddd = findViewById(R.id.ddd);
-          ddd.setOnClickListener(v -> {
-          MyDBHelper myDBHelper = new MyDBHelper(MainActivity.this,"electric.db",null,1);
-          Log.e("ShadyPi", "getView: "+myDBHelper.queryAllStation().get(0).getName());
-        });*/
-
+        init();
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -145,74 +173,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void init(){
-/*
-    if(data!=null||data.size()!=0){
-            data.clear();
-        }
-        //数据库初始化
-*/
         //渲染页面
-        StationAdapter myAdapter = new StationAdapter(data,MainActivity.this);
+        data = dbHelper.queryAllStation();
+        StationAdapter myAdapter = new StationAdapter(data, MainActivity.this, refulshLister);
         stationList.setAdapter(myAdapter);
     }
 
-    /*private class MyAdapter extends BaseAdapter{
-
-        @Override
-        public int getCount() {
-            return name.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return name[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-*//*        private final class  ViewHolder{
-            Button button;
-        }*//*
-
-*//*        @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
-            ViewHolder viewHolder;
-            if(view == null){
-                viewHolder = new ViewHolder();
-                view = LayoutInflater.from(context).inflate(R.layout.activity_main, viewGroup, false);
-                viewHolder.button = view.findViewById(R.id.name);
-                view.setTag(viewHolder);
-            }
-            else {
-                viewHolder = (ViewHolder) view.getTag();
-            }
-            //TextView textview = view.findViewById(R.id.text);
-            //textview.setText(data.get(i).getName());
-            viewHolder.button.setText(name[position]);
-
-            Log.e("ShadyPi", "getView: "+position);
-
-            return view;
-        }*//*
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = View.inflate(MainActivity.this,R.layout.stationlayout,null);
-
-            singleName = view.findViewById(R.id.name);
-            singleName.setText(name[position]);
-           *//* Intent intent = new Intent(MainActivity.this, StationActivity.class);
-            singleName.setOnClickListener(v -> {
-                s1 = singleName.getText().toString();
-                intent.putExtra("station",s1);
-                startActivity(intent);
-            });*//*
-            return view;
-        }
-    }*/
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        /*回调函数更新数据库*/
+        EditText res = Objects.requireNonNull(dialog.getDialog()).findViewById(R.id.update_name);
+        dbHelper.insertStation(res.getText().toString());
+        init();
+    }
 
 }

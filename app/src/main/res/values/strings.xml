@@ -2,5 +2,11 @@
     <string name="app_name">My Application</string>
     <string name="title_home">返回首页</string>
     <string name="title_dashboard">增加项目</string>
-    <string name="title">变电站台帐</string>
+    <string name="username">请输入…</string>
+    <string name="password">password</string>
+    <string name="title">变电站</string>
+    <string name="dialog1">输入变电站名称</string>
+    <string name="add_title">增加设备</string>
+    <string name="deviceName">设备名称:  </string>
+
 </resources>

@@ -1,11 +1,16 @@
 package com.example.stationfile;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -98,6 +103,19 @@ public class DeviceActivity extends AppCompatActivity {
         ListView imformationList1 = findViewById(R.id.imformationList1);
         RepairImformationAdapter adapter = new RepairImformationAdapter(data,DeviceActivity.this);
         imformationList1.setAdapter(adapter);
+        /*动态修改长度*/
+/*        View repairArea = findViewById(R.id.repair_area);
+        ViewGroup.LayoutParams params = imformationList1.getLayoutParams();
+        *//*setListViewHeightBasedOnChildren(imformationList1);*//*
+        ViewGroup.LayoutParams params1 = repairArea.getLayoutParams();
+        if(dip2px(this,350) < setListViewHeightBasedOnChildren(imformationList1)){
+            params.height = dip2px(this,350);
+            params1.height = dip2px(this,400);
+            imformationList1.setLayoutParams(params);
+            repairArea.setLayoutParams(params1);
+        }*/
+
+
         /*反措*/
         measures = myDbHelper.queryMeasureByDeviceId(deviceId);
         if(measures==null||measures.size()==0){
@@ -136,6 +154,36 @@ public class DeviceActivity extends AppCompatActivity {
 
 
     }
+
+    private int dip2px(Context context, float dpValue) {
+        // 获取当前手机的像素密度（1个dp对应几个px）
+
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f); // 四舍五入取整
+
+    }
+
+    public int setListViewHeightBasedOnChildren(ListView listView1) {
+        RepairImformationAdapter listAdapter = (RepairImformationAdapter) listView1.getAdapter();
+        if (listAdapter == null) {
+            return 0;
+        }
+        int totalHeight = 0;
+        //获取listView的宽度
+        ViewGroup.LayoutParams params = listView1.getLayoutParams();
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView1);
+            //给item的measure设置参数是listView的宽度就可以获取到真正每一个item的高度
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+/*        params.height = totalHeight
+                + (listView1.getDividerHeight() * (listAdapter.getCount() + 1));
+        listView1.setLayoutParams(params);*/
+        return  totalHeight;
+    }
+
 
     @Override
     protected void onStop() {

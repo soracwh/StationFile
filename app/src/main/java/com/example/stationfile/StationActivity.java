@@ -11,14 +11,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.stationfile.adapter.StationAdapter;
+import com.example.stationfile.dialog.DeleteDialog;
+import com.example.stationfile.dialog.StationDialog;
+import com.example.stationfile.dialog.UpdateDialog;
+import com.example.stationfile.entity.Interval;
 import com.example.stationfile.entity.Simplified;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class StationActivity extends AppCompatActivity {
+public class StationActivity extends AppCompatActivity implements StationDialog.NoticeDialogListener{
 
     private String[] interval= {"#1主变","#2主变","xxxx线路","220kV母联"};
     List<Simplified> data = new ArrayList<>();
@@ -26,32 +33,29 @@ public class StationActivity extends AppCompatActivity {
     private TextView singleName = null;
     EditText text;
     private Button back, search = null;
-
+    FloatingActionButton add;
     ListView intervalList = null;
+
+    MyDBHelper dbHelper;
+    String stationId;
+
+    private RefulshStateListenter refulshLister;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_station);
         Intent intent = this.getIntent();
         String s1 = intent.getStringExtra("station");
-        String stationId = intent.getStringExtra("id");
+        stationId = intent.getStringExtra("id");
         TextView textView = findViewById(R.id.stationName);
         textView.setText(s1);
 
-/*        for (int i = 0; i < interval.length; i++) {
-            Simplified simplified = new Simplified();
-            simplified.setId(i);
-            simplified.setName(interval[i]);
-            data.add(simplified);
-        }*/
-
         MyDBHelper myDbHelper = new MyDBHelper(this);
+        dbHelper = myDbHelper;
         myDbHelper.openDataBase();
-        data = myDbHelper.queryAllIntervalByStationId(Integer.parseInt(stationId));
-
+        //data = myDbHelper.queryAllIntervalByStationId(Integer.parseInt(stationId));
         //列表
         intervalList = findViewById(R.id.intervalList);
-        init();
 
         Intent intent1 = new Intent(this,IntervalActivity.class);
         intervalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,6 +70,33 @@ public class StationActivity extends AppCompatActivity {
             }
         });
 
+        refulshLister = new RefulshStateListenter() {
+            @Override
+            public void refush(Simplified s) {
+                DeleteDialog deleteDialog = new DeleteDialog(refulshLister,s);
+                deleteDialog.show(getSupportFragmentManager(),"delete");
+            }
+            @Override
+            public void dialogCallback(Simplified s) {
+                Interval interval1 = myDbHelper.queryAllByIntervalId(s.getId());
+                myDbHelper.deleteInterval(interval1.getIntervalId());
+                init();
+            }
+            @Override
+            public void update(Simplified s) {
+                UpdateDialog updateDialog = new UpdateDialog("修改",refulshLister,s);
+                updateDialog.show(getSupportFragmentManager(),"update");
+            }
+
+            @Override
+            public void updateCallback(Simplified s,String newName) {
+                Interval interval1 = myDbHelper.queryAllByIntervalId(s.getId());
+                System.out.println(newName);
+                myDbHelper.updateInterval(interval1,newName);
+                init();
+            }
+        };
+
         //返回
         back = findViewById(R.id.back);
         back.setOnClickListener(v -> {
@@ -79,44 +110,30 @@ public class StationActivity extends AppCompatActivity {
             data = myDbHelper.queryByIntervalName(s);
             init();
         });
+
+        add = findViewById(R.id.add_interval);
+        add.setOnClickListener(v -> {
+            StationDialog stationDialog = new StationDialog("增加间隔");
+            stationDialog.show(this.getSupportFragmentManager(),null);
+        });
+        init();
     }
 
     private void init(){
 
         //渲染页面
-        StationAdapter myAdapter = new StationAdapter(data,StationActivity.this);
+        data = dbHelper.queryAllIntervalByStationId(Integer.parseInt(stationId));
+        StationAdapter myAdapter = new StationAdapter(data,StationActivity.this,refulshLister);
         intervalList.setAdapter(myAdapter);
     }
 
-/*    private class intervalAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return interval.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return interval[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = View.inflate(StationActivity.this,R.layout.stationlayout,null);
-            singleName = view.findViewById(R.id.name);
-            singleName.setText(interval[position]);
-            *//*Intent intent = new Intent(StationActivity.this, IntervalActivity.class);
-            singleName.setOnClickListener(v -> {
-                String s1 = singleName.getText().toString();
-                intent.putExtra("Interval",s1);
-                startActivity(intent);
-            });*//*
-            return view;
-        }
-    }*/
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        EditText res = Objects.requireNonNull(dialog.getDialog()).findViewById(R.id.update_name);
+        Interval interval1 = new Interval();
+        interval1.setStationId(Integer.parseInt(stationId));
+        interval1.setName(res.getText().toString());
+        dbHelper.insertInterval(interval1);
+        init();
+    }
 }
