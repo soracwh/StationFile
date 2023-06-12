@@ -79,6 +79,7 @@ public class StationActivity extends AppCompatActivity implements StationDialog.
             @Override
             public void dialogCallback(Simplified s) {
                 Interval interval1 = myDbHelper.queryAllByIntervalId(s.getId());
+                myDbHelper.deleteDeviceByInterval(interval1.getIntervalId());
                 myDbHelper.deleteInterval(interval1.getIntervalId());
                 init();
             }

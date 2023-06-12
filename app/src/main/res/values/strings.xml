@@ -7,6 +7,9 @@
     <string name="title">变电站</string>
     <string name="dialog1">输入变电站名称</string>
     <string name="add_title">增加设备</string>
-    <string name="deviceName">设备名称:  </string>
+    <string name="deviceName">设备名称:    </string>
+    <string name="coName">设备厂家:    </string>
+    <string name="info">设备型号:    </string>
+    <string name="time">投运时间:    </string>
 
 </resources>
