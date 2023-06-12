@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.stationfile.R;
@@ -63,6 +64,9 @@ public class MeasureAdapter extends BaseAdapter {
         }
         viewHolder.content.setText(measures.get(i).getContent());
         viewHolder.target.setText(measures.get(i).getTarget());
+        viewHolder.update.setOnClickListener(v -> {
+
+        });
         return view;
     }
 
@@ -73,6 +77,7 @@ public class MeasureAdapter extends BaseAdapter {
         TextView date;
         TextView person;
         View iv;
+        ImageView update;
         public ViewHolder(View view) {
             this.content = view.findViewById(R.id.content);
             this.completeLabel = view.findViewById(R.id.complete_label);
@@ -80,6 +85,7 @@ public class MeasureAdapter extends BaseAdapter {
             this.person = view.findViewById(R.id.person);
             this.date = view.findViewById(R.id.date);
             this.iv = view.findViewById(R.id.iv);
+            this.update = view.findViewById(R.id.update_measure);
         }
     }
 }

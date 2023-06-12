@@ -28,7 +28,7 @@ import com.example.stationfile.entity.RepairRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeviceActivity extends AppCompatActivity {
+public class DeviceActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button back;
     List<RepairRecord> data = new ArrayList<>();
@@ -36,6 +36,8 @@ public class DeviceActivity extends AppCompatActivity {
     List<Defect> defects = new ArrayList<>();
 
     List<Measure> measures =new ArrayList<>();
+
+    MyDBHelper dbHelper;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -45,6 +47,7 @@ public class DeviceActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         MyDBHelper myDbHelper = new MyDBHelper(this);
         myDbHelper.openDataBase();
+        dbHelper = myDbHelper;
 
         View view = findViewById(R.id.backcolor);
         Device device = new Device();
@@ -88,6 +91,7 @@ public class DeviceActivity extends AppCompatActivity {
         View repairArea = findViewById(R.id.show1);
         if(data==null||data.size()==0){
             repairArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
+            repairArea.setVisibility(View.GONE);
         }else {
             repairArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             RepairImformationAdapter adapter = new RepairImformationAdapter(data,DeviceActivity.this);
@@ -100,6 +104,7 @@ public class DeviceActivity extends AppCompatActivity {
         View defectArea = findViewById(R.id.show2);
         if(defects==null||defects.size()==0){
             defectArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
+            defectArea.setVisibility(View.GONE);
         }else{
             defectArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             DefectAdapter defectAdapter = new DefectAdapter(defects,DeviceActivity.this);
@@ -124,12 +129,14 @@ public class DeviceActivity extends AppCompatActivity {
         View measureArea = findViewById(R.id.show3);
         if(measures==null||measures.size()==0){
             measureArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
+            measureArea.setVisibility(View.GONE);
         }else{
             measureArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             ListView measureList = findViewById(R.id.imformationList3);
             MeasureAdapter measureAdapter = new MeasureAdapter(measures,DeviceActivity.this);
             measureList.setAdapter(measureAdapter);
         }
+
 
 
         int count1 = 0;
@@ -194,4 +201,8 @@ public class DeviceActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }

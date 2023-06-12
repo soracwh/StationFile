@@ -11,11 +11,47 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:textSize="50dp"
+        android:textSize="30dp"
         android:id="@+id/d_title"
-        android:text="@string/add_title" />
+        android:text="@string/m_title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="@string/m_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <EditText
+            android:layout_width="350dp"
+            android:layout_height="80dp"
+            android:background="@color/white"
+            android:id="@+id/m_content"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="@string/m_measure"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <EditText
+            android:layout_width="350dp"
+            android:layout_height="80dp"
+            android:background="@color/white"
+            android:id="@+id/m_measure"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,16 +65,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:gravity="right"
-            android:text="@string/deviceName"/>
-        <EditText
+            android:text="@string/m_complete"/>
+        <RadioGroup
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="3"
-            android:background="@color/white"
-            android:id="@+id/d_name">
-        </EditText>
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+            <RadioButton android:id="@+id/radio_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pirates"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ninjas"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -57,43 +101,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:textSize="25dp"
-            android:gravity="right"
-            android:text="@string/coName"/>
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="3"
-            android:background="@color/white"
-            android:id="@+id/d_co">
-        </EditText>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:gravity="right"
             android:text="@string/info"/>
         <EditText
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_weight="3"
             android:background="@color/white"
-            android:id="@+id/d_info">
+            android:id="@+id/d_person">
         </EditText>
         <TextView
             android:layout_width="0dp"
@@ -113,14 +129,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:gravity="right"
             android:text="@string/time"/>
         <EditText
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_weight="3"
             android:background="@color/white"
+            android:hint="YYYY-MM"
             android:id="@+id/d_time">
         </EditText>
         <TextView

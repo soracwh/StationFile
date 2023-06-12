@@ -131,6 +131,16 @@ public class Device {
     int intervalId;
     String name;
 
+    int SD_id;
+
+    public void setSD_id(int SD_id) {
+        this.SD_id = SD_id;
+    }
+
+    public int getSD_id() {
+        return SD_id;
+    }
+
     public void setTypeId(int typeId) {
         this.typeId = typeId;
     }

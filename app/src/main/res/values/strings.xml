@@ -9,7 +9,14 @@
     <string name="add_title">增加设备</string>
     <string name="deviceName">设备名称:    </string>
     <string name="coName">设备厂家:    </string>
-    <string name="info">设备型号:    </string>
-    <string name="time">投运时间:    </string>
+    <string name="info">负责人:    </string>
+    <string name="time">完成时间:    </string>
+    <string name="m_content">反措内容</string>
+    <string name="m_title">增加反措</string>
+    <string name="m_measure">针对性措施</string>
+    <string name="m_complete">是否完成：   </string>
+    <string name="pirates">是</string>
+    <string name="ninjas">否</string>
+    <string name="devicetype">请输入设备名</string>
 
 </resources>

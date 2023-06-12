@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.stationfile.adapter.StationAdapter;
 import com.example.stationfile.dialog.DeleteDialog;
 import com.example.stationfile.dialog.StationDialog;
+import com.example.stationfile.dialog.UpdateDeviceDialog;
 import com.example.stationfile.dialog.UpdateDialog;
 import com.example.stationfile.entity.Device;
 import com.example.stationfile.entity.Interval;
@@ -73,7 +74,7 @@ public class TypeActivity extends AppCompatActivity implements StationDialog.Not
 
             @Override
             public void update(Simplified s) {
-                UpdateDialog updateDialog = new UpdateDialog("修改",refulshLister,s);
+                UpdateDeviceDialog updateDialog = new UpdateDeviceDialog("修改",refulshLister,s);
                 updateDialog.show(getSupportFragmentManager(),"update");
             }
 
@@ -81,6 +82,10 @@ public class TypeActivity extends AppCompatActivity implements StationDialog.Not
             public void updateCallback(Simplified s, String newName) {
                 deviceInfo.setName(newName);
                 deviceInfo.setId(s.getId());
+                deviceInfo.setSD_id(Integer.parseInt(s.getName()));
+                System.out.println(deviceInfo.getName());
+                System.out.println(deviceInfo.getId());
+                System.out.println(deviceInfo.getSD_id());
                 dbHelper.updateDevice(deviceInfo);
                 init();
             }
@@ -128,7 +133,9 @@ public class TypeActivity extends AppCompatActivity implements StationDialog.Not
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         EditText res = Objects.requireNonNull(dialog.getDialog()).findViewById(R.id.update_name);
+        EditText Sd = dialog.getDialog().findViewById(R.id.SD_id);
         deviceInfo.setName(res.getText().toString());
+        deviceInfo.setSD_id(Integer.parseInt(Sd.getText().toString()));
         dbHelper.insertDevice(deviceInfo);
         init();
     }

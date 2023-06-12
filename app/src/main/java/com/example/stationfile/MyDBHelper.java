@@ -218,13 +218,14 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         db.execSQL("delete from device where interval_id = ?", new Object[] {id});
     }
     public void insertDevice(Device device){
-        db.execSQL("insert into device (station_id,interval_id,type_id,name) values (?,?,?,?)",
-                new Object[] {device.getStationId(),device.getIntervalId(),device.getTypeId(),device.getName()});
+        db.execSQL("insert into device (station_id,interval_id,type_id,name,SD_id) values (?,?,?,?,?)",
+                new Object[] {device.getStationId(),device.getIntervalId(),device.getTypeId(),device.getName(),device.getSD_id()});
     }
 
     public void updateDevice(Device device){
-        db.execSQL("update device set name=? where id = ?",
-                new Object[] {device.getName(),device.getId()});
+        db.execSQL("update device set name=?, SD_id = ? where id = ?",
+                new Object[] {device.getName(),device.getSD_id(),device.getId()});
+
     }
 
 

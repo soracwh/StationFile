@@ -1,5 +1,6 @@
 package com.example.stationfile;
 
+
 import com.example.stationfile.entity.Simplified;
 
 public interface RefulshStateListenter {
@@ -9,4 +10,5 @@ public interface RefulshStateListenter {
     void update(Simplified s);
 
     void updateCallback(Simplified s,String newName);
+
 }
