@@ -15,4 +15,5 @@
     <color name="color_deep_blue">#0649A1</color>
     <color name="blue_text">#03A9F4</color>
     <color name="uncomplete_text">#E31809</color>
+    <color name="back_grey">#4e4e4e</color>
 </resources>

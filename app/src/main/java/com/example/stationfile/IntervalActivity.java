@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stationfile.adapter.StationAdapter;
+import com.example.stationfile.adapter.TypeAdapter;
 import com.example.stationfile.entity.Simplified;
 
 import java.util.ArrayList;
@@ -57,10 +58,10 @@ public class IntervalActivity extends AppCompatActivity {
 
         TypeList.setOnItemClickListener((adapterView, view, i, l) -> {
             String s11 = data.get(i).getName();
-            int s2 = data.get(i).getId();
+            int s12 = data.get(i).getId();
             intent2.putExtra("type", s11);
             intent2.putExtra("intervalId",intervalId);
-            intent2.putExtra("typeId", String.valueOf(s2));
+            intent2.putExtra("typeId", String.valueOf(s12));
             startActivity(intent2);
         });
 
@@ -83,7 +84,7 @@ public class IntervalActivity extends AppCompatActivity {
     private void init(){
 
         //渲染页面
-        StationAdapter myAdapter = new StationAdapter(data,IntervalActivity.this, refulshLister);
+        TypeAdapter myAdapter = new TypeAdapter(data,IntervalActivity.this);
         TypeList.setAdapter(myAdapter);
     }
 

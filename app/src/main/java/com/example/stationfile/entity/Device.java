@@ -131,6 +131,15 @@ public class Device {
     int intervalId;
     String name;
 
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
+
+    public int getTypeId() {
+        return typeId;
+    }
+
+    int typeId;
     public void setStationId(int stationId) {
         this.stationId = stationId;
     }

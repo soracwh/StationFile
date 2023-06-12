@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements StationDialog.Not
             }
             @Override
             public void dialogCallback(Simplified s) {
+                dbHelper.deleteDeviceByStation(s.getId());
+                dbHelper.deleteIntervalByStationId(s.getId());
                 dbHelper.deleteStation(s.getId());
                 init();
             }

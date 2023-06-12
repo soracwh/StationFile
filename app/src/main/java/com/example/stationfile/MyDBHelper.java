@@ -162,8 +162,8 @@ public class MyDBHelper  extends SQLiteOpenHelper {
         db.execSQL("insert into station (name,level) values (?,?)",new Object[] {name,level});
     }
 
-    public void deleteStation(int id){
-        db.execSQL("delete from station where id = ?", new Object[] {id});
+    public void deleteStation(int id) {
+        db.execSQL("delete from station where id = ?", new Object[]{id});
     }
 
     public void updateStation(Simplified s, String newName){
@@ -187,15 +187,17 @@ public class MyDBHelper  extends SQLiteOpenHelper {
     public void deleteInterval(int id){
         db.execSQL("delete from interval where id = ?", new Object[] {id});
     }
+    public void deleteIntervalByStationId(int id){
+        db.execSQL("delete from interval where station_id = ?", new Object[] {id});
+    }
     public void updateInterval(Interval interval, String newName){
         db.execSQL("update interval set name = ? where id  = ?", new Object[] {newName,interval.getIntervalId()});
 
     }
 
-
     public List<Simplified> queryAllType(){
         List<Simplified> res = new ArrayList<>();
-        String sql_sel = "select  t.id, t.name from type ";
+        String sql_sel = "select  t.id, t.name from type as t";
         @SuppressLint("Recycle") Cursor cursor = db.rawQuery(sql_sel,null);
         while (cursor.moveToNext()){
             Simplified simplified = new Simplified();
@@ -204,6 +206,25 @@ public class MyDBHelper  extends SQLiteOpenHelper {
             res.add(simplified);
         }
         return res;
+    }
+
+    public void deleteDevice(int id){
+        db.execSQL("delete from device where id = ?", new Object[] {id});
+    }
+    public void deleteDeviceByStation(int id){
+        db.execSQL("delete from device where station_id = ?", new Object[] {id});
+    }
+    public void deleteDeviceByInterval(int id){
+        db.execSQL("delete from device where interval_id = ?", new Object[] {id});
+    }
+    public void insertDevice(Device device){
+        db.execSQL("insert into device (station_id,interval_id,type_id,name) values (?,?,?,?)",
+                new Object[] {device.getStationId(),device.getIntervalId(),device.getTypeId(),device.getName()});
+    }
+
+    public void updateDevice(Device device){
+        db.execSQL("update device set name=? where id = ?",
+                new Object[] {device.getName(),device.getId()});
     }
 
 
