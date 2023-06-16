@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements StationDialog.Not
             }
             @Override
             public void update(Simplified s) {
-                UpdateDialog updateDialog = new UpdateDialog("修改",refulshLister,s);
+                UpdateDialog updateDialog = new UpdateDialog("修改",refulshLister,s,MainActivity.this);
                 updateDialog.show(getSupportFragmentManager(),"update");
             }
 
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements StationDialog.Not
         });
 
         add.setOnClickListener(v -> {
-            StationDialog stationDialog = new StationDialog("增加变电站");
+            StationDialog stationDialog = new StationDialog("增加变电站",this);
             stationDialog.show(this.getSupportFragmentManager(),null);
         });
 

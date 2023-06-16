@@ -6,6 +6,9 @@ public class RepairRecord {
     int id;
     String time;
 
+    public RepairRecord() {
+    }
+
     public String getContent() {
         return content;
     }

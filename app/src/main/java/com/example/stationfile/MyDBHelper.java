@@ -225,7 +225,13 @@ public class MyDBHelper  extends SQLiteOpenHelper {
     public void updateDevice(Device device){
         db.execSQL("update device set name=?, SD_id = ? where id = ?",
                 new Object[] {device.getName(),device.getSD_id(),device.getId()});
-
+    }
+    public void deleteRepair(int id){
+        db.execSQL("delete from repair where id = ?", new Object[] {id});
+    }
+    public void insertRepair(RepairRecord record){
+        db.execSQL("insert into repair (content,time,person) values (?,?,?)",
+                new Object[] {record.getContent(),record.getTime(),record.getPerson()});
     }
 
 

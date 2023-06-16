@@ -3,13 +3,17 @@ package com.example.stationfile.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.stationfile.R;
 import com.example.stationfile.RefulshStateListenter;
 import com.example.stationfile.entity.Simplified;
+
+import java.util.Objects;
 
 
 public class DeleteDialog extends DialogFragment {

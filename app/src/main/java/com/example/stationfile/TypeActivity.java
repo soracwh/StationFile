@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.stationfile.adapter.StationAdapter;
+import com.example.stationfile.dialog.AddDeviceDialog;
 import com.example.stationfile.dialog.DeleteDialog;
 import com.example.stationfile.dialog.StationDialog;
 import com.example.stationfile.dialog.UpdateDeviceDialog;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TypeActivity extends AppCompatActivity implements StationDialog.NoticeDialogListener{
+public class TypeActivity extends AppCompatActivity implements AddDeviceDialog.NoticeDialogListener{
 
     Button back,search = null;
     List<Simplified> data = new ArrayList<>();
@@ -74,7 +75,7 @@ public class TypeActivity extends AppCompatActivity implements StationDialog.Not
 
             @Override
             public void update(Simplified s) {
-                UpdateDeviceDialog updateDialog = new UpdateDeviceDialog("修改",refulshLister,s);
+                UpdateDeviceDialog updateDialog = new UpdateDeviceDialog("修改",refulshLister,s,TypeActivity.this);
                 updateDialog.show(getSupportFragmentManager(),"update");
             }
 
@@ -117,7 +118,7 @@ public class TypeActivity extends AppCompatActivity implements StationDialog.Not
             init();
         });
         add.setOnClickListener(v -> {
-            StationDialog stationDialog = new StationDialog("增加设备");
+            AddDeviceDialog stationDialog = new AddDeviceDialog("增加设备",this);
             stationDialog.show(this.getSupportFragmentManager(),null);
         });
 

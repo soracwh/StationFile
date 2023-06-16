@@ -3,6 +3,7 @@ package com.example.stationfile;
 import static android.app.PendingIntent.getActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,9 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.stationfile.adapter.DefectAdapter;
@@ -39,6 +47,11 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
 
     MyDBHelper dbHelper;
 
+    ImageView addRepair,addMeasure,addDefect;
+
+    Device device;
+    ActivityResultLauncher launcher;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +61,26 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
         MyDBHelper myDbHelper = new MyDBHelper(this);
         myDbHelper.openDataBase();
         dbHelper = myDbHelper;
+        addRepair = findViewById(R.id.repair_add);
+        addMeasure = findViewById(R.id.measure_add);
+        addDefect = findViewById(R.id.defect_add);
+        addDefect.setOnClickListener(this);
+        addMeasure.setOnClickListener(this);
+        addRepair.setOnClickListener(this);
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getResultCode() == Activity.RESULT_OK){
+                        assert result.getData() != null;
+                        Toast.makeText(DeviceActivity.this,result.getData().getStringExtra("data_return"),Toast.LENGTH_SHORT).show();
+                        initRepair();
+                        initDefect();
+                        initMeasure();
+                    }
+                });
 
         View view = findViewById(R.id.backcolor);
-        Device device = new Device();
-        int deviceId = 0;
+        device = new Device();
+        int deviceId;
 
         if(intent.getStringExtra("SD_id")!=null){
             device = myDbHelper.queryDeviceBySDId(Integer.parseInt(intent.getStringExtra("SD_id")));
@@ -87,29 +116,10 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
 
         data = myDbHelper.queryRepairByDeviceId(deviceId);
         //Log.e("ShadyPi", "getRecord: "+data.size());
-        ListView repairList = findViewById(R.id.imformationList1);
-        View repairArea = findViewById(R.id.show1);
-        if(data==null||data.size()==0){
-            repairArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
-            repairArea.setVisibility(View.GONE);
-        }else {
-            repairArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
-            RepairImformationAdapter adapter = new RepairImformationAdapter(data,DeviceActivity.this);
-            repairList.setAdapter(adapter);
-        }
-
-        /*缺陷*/
-        ListView defectList = findViewById(R.id.imformationList2);
-        defects = myDbHelper.queryDefectByDeviceId(deviceId);
-        View defectArea = findViewById(R.id.show2);
-        if(defects==null||defects.size()==0){
-            defectArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
-            defectArea.setVisibility(View.GONE);
-        }else{
-            defectArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
-            DefectAdapter defectAdapter = new DefectAdapter(defects,DeviceActivity.this);
-            defectList.setAdapter(defectAdapter);
-        }
+        //初始化
+        initRepair();
+        initDefect();
+        initMeasure();
 
         /*动态修改长度*/
 /*        View repairArea = findViewById(R.id.repair_area);
@@ -122,21 +132,6 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
             imformationList1.setLayoutParams(params);
             repairArea.setLayoutParams(params1);
         }*/
-
-
-        /*反措*/
-        measures = myDbHelper.queryMeasureByDeviceId(deviceId);
-        View measureArea = findViewById(R.id.show3);
-        if(measures==null||measures.size()==0){
-            measureArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
-            measureArea.setVisibility(View.GONE);
-        }else{
-            measureArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
-            ListView measureList = findViewById(R.id.imformationList3);
-            MeasureAdapter measureAdapter = new MeasureAdapter(measures,DeviceActivity.this);
-            measureList.setAdapter(measureAdapter);
-        }
-
 
 
         int count1 = 0;
@@ -164,6 +159,49 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
         });
 
 
+    }
+
+    private void initMeasure() {
+        /*反措*/
+        measures = dbHelper.queryMeasureByDeviceId(device.getId());
+        View measureArea = findViewById(R.id.show3);
+        if(measures==null||measures.size()==0){
+            measureArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
+            measureArea.setVisibility(View.GONE);
+        }else{
+            measureArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            ListView measureList = findViewById(R.id.imformationList3);
+            MeasureAdapter measureAdapter = new MeasureAdapter(measures,DeviceActivity.this);
+            measureList.setAdapter(measureAdapter);
+        }
+    }
+
+    private void initDefect() {
+        /*缺陷*/
+        ListView defectList = findViewById(R.id.imformationList2);
+        defects = dbHelper.queryDefectByDeviceId(device.getId());
+        View defectArea = findViewById(R.id.show2);
+        if(defects==null||defects.size()==0){
+            defectArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
+            defectArea.setVisibility(View.GONE);
+        }else{
+            defectArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            DefectAdapter defectAdapter = new DefectAdapter(defects,DeviceActivity.this);
+            defectList.setAdapter(defectAdapter);
+        }
+    }
+
+    private void initRepair() {
+        ListView repairList = findViewById(R.id.imformationList1);
+        View repairArea = findViewById(R.id.show1);
+        if(data==null||data.size()==0){
+            repairArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
+            repairArea.setVisibility(View.GONE);
+        }else {
+            repairArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            RepairImformationAdapter adapter = new RepairImformationAdapter(data,DeviceActivity.this);
+            repairList.setAdapter(adapter);
+        }
     }
 
     private int dip2px(Context context, float dpValue) {
@@ -201,8 +239,23 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
         super.onStop();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()){
+            case R.id.repair_add:
+                Intent intent1 =new Intent(this,AddRepairActivity.class);
+                intent1.putExtra("deviceId",String.valueOf(device.getId()));
+                launcher.launch(intent1);
+                break;
+            case R.id.defect_add:
+                Intent intent2 = new Intent(this,AddDefectActivity.class);
+                intent2.putExtra("deviceId",device.getId());
+                break;
+            case R.id.measure_add:
+                Intent intent3 = new Intent(this,AddDeviceActivity.class);
+                intent3.putExtra("deviceId",device.getId());
+                break;
+        }
     }
 }

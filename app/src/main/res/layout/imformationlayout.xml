@@ -5,7 +5,34 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="检修内容："
+            android:textSize="18dp">
+        </TextView>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/ic_update"
+            android:id="@+id/update_measure">
+        </ImageView>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1、#1主变精益化整治。#1主变220kV、110kV中性点避雷器、间隙流变精益化整治，避雷器开盖检查"
+        android:id="@+id/content"
+        android:paddingBottom="5dp">
+    </TextView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,19 +71,6 @@
             android:id="@+id/date">
         </TextView>
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="检修内容："
-        android:textSize="16dp">
-    </TextView>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="1、#1主变精益化整治。#1主变220kV、110kV中性点避雷器、间隙流变精益化整治，避雷器开盖检查"
-        android:id="@+id/content"
-        android:paddingBottom="5dp">
-    </TextView>
 
 
 </LinearLayout>

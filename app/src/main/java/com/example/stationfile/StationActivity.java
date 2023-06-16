@@ -85,7 +85,7 @@ public class StationActivity extends AppCompatActivity implements StationDialog.
             }
             @Override
             public void update(Simplified s) {
-                UpdateDialog updateDialog = new UpdateDialog("修改",refulshLister,s);
+                UpdateDialog updateDialog = new UpdateDialog("修改",refulshLister,s,StationActivity.this);
                 updateDialog.show(getSupportFragmentManager(),"update");
             }
 
@@ -114,7 +114,7 @@ public class StationActivity extends AppCompatActivity implements StationDialog.
 
         add = findViewById(R.id.add_interval);
         add.setOnClickListener(v -> {
-            StationDialog stationDialog = new StationDialog("增加间隔");
+            StationDialog stationDialog = new StationDialog("增加间隔",this);
             stationDialog.show(this.getSupportFragmentManager(),null);
         });
         init();

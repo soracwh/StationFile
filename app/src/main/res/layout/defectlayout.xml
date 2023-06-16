@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:descendantFocusability="blocksDescendants">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="  一般缺陷  "
-            android:textSize="14dp"
+            android:textSize="15dp"
             android:textColor="@color/uncomplete_text"
             android:background="@drawable/complete_text"
             android:id="@+id/level">
@@ -24,11 +25,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="  已完成  "
-            android:textSize="14dp"
+            android:textSize="15dp"
             android:textColor="@color/blue_text"
             android:background="@drawable/shape_text"
             android:id="@+id/complete_label">
         </TextView>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/ic_update"
+            android:id="@+id/update_defect">
+        </ImageView>
     </LinearLayout>
 
     <LinearLayout

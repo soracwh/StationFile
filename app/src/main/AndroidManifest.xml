@@ -20,6 +20,12 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="33">
         <activity
+            android:name=".AddRepairActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddDefectActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddDeviceActivity"
             android:exported="false" />
         <activity

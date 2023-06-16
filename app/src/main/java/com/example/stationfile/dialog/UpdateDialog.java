@@ -2,8 +2,10 @@ package com.example.stationfile.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +24,13 @@ public class UpdateDialog extends DialogFragment {
     private RefulshStateListenter refulshLister;
 
     private Simplified simplified;
+    private Context context;
 
-    public UpdateDialog(String title, RefulshStateListenter refulshLister, Simplified simplified){
+    public UpdateDialog(String title, RefulshStateListenter refulshLister, Simplified simplified, Context context){
         this.title = title;
         this.refulshLister = refulshLister;
         this.simplified = simplified;
+        this.context = context;
     }
 
     @NonNull
@@ -39,8 +43,12 @@ public class UpdateDialog extends DialogFragment {
                 // Add action buttons
                .setPositiveButton("确认", (dialog, id) -> {
                     EditText res = Objects.requireNonNull(this.getDialog()).findViewById(R.id.update_name);
-                    res.setHint(simplified.getName());
-                    refulshLister.updateCallback(simplified,res.getText().toString());
+                    //res.setHint(simplified.getName());
+                   if(res.getText().toString().length() == 0){
+                       Toast.makeText(this.context,"请输入数据",Toast.LENGTH_SHORT).show();
+                   }else {
+                       refulshLister.updateCallback(simplified, res.getText().toString());
+                   }
                 })
                 .setNegativeButton("取消", (dialog, id) -> UpdateDialog.this.getDialog().cancel());
         return builder.create();

@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    tools:context=".AddDeviceActivity"
-    android:orientation="vertical">
+    tools:context=".AddDefectActivity"
+    android:orientation="vertical"
+    android:background="@color/grey">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/teal_200">
+        android:background="@color/teal_200"
+        android:layout_marginBottom="10dp">
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -27,7 +28,7 @@
             android:gravity="center"
             android:textSize="30dp"
             android:id="@+id/d_title"
-            android:text="@string/m_title" />
+            android:text="增加缺陷" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -39,7 +40,7 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:gravity="center"
-        android:text="@string/m_content"/>
+        android:text="缺陷内容"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,24 +50,6 @@
             android:layout_height="80dp"
             android:background="@color/white"
             android:id="@+id/m_content"/>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:text="@string/m_measure"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
-        <EditText
-            android:layout_width="350dp"
-            android:layout_height="80dp"
-            android:background="@color/white"
-            android:id="@+id/m_measure"/>
     </LinearLayout>
 
     <LinearLayout
@@ -95,6 +78,42 @@
                 android:text="@string/pirates"
                 android:onClick="onRadioButtonClicked"/>
             <RadioButton android:id="@+id/radio_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ninjas"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="20dp"
+            android:gravity="right"
+            android:text="是否重要缺陷：  "/>
+        <RadioGroup
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+            <RadioButton android:id="@+id/radio1_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pirates"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio1_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ninjas"
@@ -154,7 +173,7 @@
             android:layout_height="30dp"
             android:layout_weight="3"
             android:background="@color/white"
-            android:hint="YYYY-MM"
+            android:hint="YYYY-MM-DD"
             android:id="@+id/d_time">
         </EditText>
         <TextView
@@ -196,4 +215,5 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
     </LinearLayout>
+
 </LinearLayout>
