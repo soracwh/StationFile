@@ -224,7 +224,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="1dp"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="10dp"
                         android:layout_gravity="center"
                         android:src="@mipmap/ic_add"
                         android:id="@+id/repair_add"/>
@@ -288,7 +288,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="1dp"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="10dp"
                         android:layout_gravity="center"
                         android:src="@mipmap/ic_add"
                         android:id="@+id/defect_add"/>
@@ -351,7 +351,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="1dp"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="10dp"
                         android:layout_gravity="center"
                         android:src="@mipmap/ic_add"
                         android:id="@+id/measure_add"/>

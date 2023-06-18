@@ -8,6 +8,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.stationfile.entity.Defect;
 import com.example.stationfile.entity.Device;
@@ -224,15 +225,96 @@ public class MyDBHelper  extends SQLiteOpenHelper {
 
     public void updateDevice(Device device){
         db.execSQL("update device set name=?, SD_id = ? where id = ?",
+
                 new Object[] {device.getName(),device.getSD_id(),device.getId()});
     }
     public void deleteRepair(int id){
         db.execSQL("delete from repair where id = ?", new Object[] {id});
+        db.execSQL("delete from repair_device where repair_id = ?", new Object[] {id});
     }
-    public void insertRepair(RepairRecord record){
+    public void insertRepair(RepairRecord record, int deviceId){
         db.execSQL("insert into repair (content,time,person) values (?,?,?)",
                 new Object[] {record.getContent(),record.getTime(),record.getPerson()});
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery("select max(id) from repair",null);
+        int repairId = 0;
+        while (cursor.moveToNext()){
+            repairId = cursor.getInt(0);
+        }
+        db.execSQL("insert into repair_device (device_id, repair_id) values (?,?)",
+                new Object[] {deviceId, repairId});
     }
+    public void updateRepair(RepairRecord record){
+        db.execSQL("update repair set content=?, time = ?, person = ? where id = ?",
+                new Object[] {record.getContent(),record.getTime(),record.getPerson()});
+    }
+
+    public RepairRecord queryRepairById(int id){
+        RepairRecord record = new RepairRecord();
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery("select * from repair where id = "+id,null);
+        while (cursor.moveToNext()){
+            record.setId(id);
+            record.setContent(cursor.getString(1));
+            record.setPerson(cursor.getString(2));
+            record.setTime(cursor.getString(3));
+        }
+        return record;
+    }
+
+    public Defect queryDefectById(int id){
+        Defect defect = new Defect();
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery("select * from defect where id = "+id,null);
+        while (cursor.moveToNext()){
+            defect.setId(id);
+            defect.setContent(cursor.getString(1));
+            defect.setTime(cursor.getString(2));
+            defect.setLevel(cursor.getInt(3));
+            defect.setPerson(cursor.getString(4));
+            defect.setFlag(cursor.getInt(5));
+            defect.setDeviceId(cursor.getInt(6));
+        }
+        return defect;
+    }
+
+    public void deleteDefect(int id){
+        db.execSQL("delete from defect where id = ?", new Object[] {id});
+    }
+
+    public void updateDefect(Defect defect){
+        db.execSQL("update defect set content=?, time = ?, level = ?, person = ?, flag = ? where id = ?",
+                new Object[] {defect.getContent(),defect.getTime(),defect.getLevel(),defect.getPerson(),defect.getFlag(),defect.getId()});
+    }
+
+    public void insertDefect(Defect defect){
+        db.execSQL("insert into defect (content,time,level,person,flag,device_id) values (?,?,?,?,?,?)",
+                new Object[] {defect.getContent(),defect.getTime(),defect.getLevel(),defect.getPerson(),defect.getFlag(),defect.getDeviceId()});
+    }
+
+    public Measure queryMeasureById(int id){
+        Measure measure = new Measure();
+        @SuppressLint("Recycle") Cursor cursor = db.rawQuery("select * from measure where id = "+id,null);
+        while (cursor.moveToNext()){
+            measure.setId(id);
+            measure.setContent(cursor.getString(1));
+            measure.setDate(cursor.getString(6));
+            measure.setFlag(cursor.getInt(3));
+            measure.setPerson(cursor.getString(5));
+            measure.setDeviceId(cursor.getInt(2));
+            measure.setTarget(cursor.getString(4));
+        }
+        return measure;
+    }
+    public void deleteMeasure(int id){
+        db.execSQL("delete from measure where id = ?", new Object[] {id});
+    }
+    public void insertMeasure(Measure measure){
+        db.execSQL("insert into measure (content,device_id,flag,target,person,time) values (?,?,?,?,?,?)",
+                new Object[] {measure.getContent(),measure.getDeviceId(),measure.getFlag(),measure.getTarget(),measure.getPerson(),measure.getDate()});
+    }
+    public void updateMeasure(Measure measure){
+        db.execSQL("update measure set content=?, time = ?, flag = ?, person = ?, target = ? where id = ?",
+                new Object[] {measure.getContent(),measure.getDate(),measure.getFlag(),measure.getPerson(),measure.getTarget(),measure.getId()});
+    }
+
 
 
     public List<Simplified> queryAllStation(){

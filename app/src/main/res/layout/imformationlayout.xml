@@ -18,12 +18,12 @@
             android:text="检修内容："
             android:textSize="18dp">
         </TextView>
-        <ImageView
+<!--        <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@mipmap/ic_update"
             android:id="@+id/update_measure">
-        </ImageView>
+        </ImageView>-->
     </LinearLayout>
 
     <TextView

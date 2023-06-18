@@ -17,7 +17,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@mipmap/ic_back">
+            android:src="@mipmap/ic_back"
+            android:id="@+id/back">
         </ImageView>
         <TextView
             android:layout_width="0dp"
@@ -88,17 +89,16 @@
         <RadioGroup
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3">
+            android:layout_weight="3"
+            android:id="@+id/group1">
             <RadioButton android:id="@+id/radio_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pirates"
-                android:onClick="onRadioButtonClicked"/>
+                android:text="@string/pirates" />
             <RadioButton android:id="@+id/radio_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ninjas"
-                android:onClick="onRadioButtonClicked"/>
+                android:text="@string/ninjas" />
         </RadioGroup>
         <TextView
             android:layout_width="0dp"

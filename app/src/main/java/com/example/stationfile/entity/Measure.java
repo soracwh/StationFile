@@ -8,6 +8,15 @@ public class Measure {
     String person;
     String date;
     String target;
+    int deviceId;
+
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public int getDeviceId() {
+        return deviceId;
+    }
 
     public void setId(int id) {
         this.id = id;

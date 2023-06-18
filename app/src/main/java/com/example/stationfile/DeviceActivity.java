@@ -52,6 +52,8 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
     Device device;
     ActivityResultLauncher launcher;
 
+    ListView repairList, measureList, defectList;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,9 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
                         initMeasure();
                     }
                 });
+        measureList = findViewById(R.id.imformationList3);
+        defectList = findViewById(R.id.imformationList2);
+        repairList = findViewById(R.id.imformationList1);
 
         View view = findViewById(R.id.backcolor);
         device = new Device();
@@ -114,13 +119,33 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
         TextView intervalName = findViewById(R.id.interval);
         intervalName.setText(interval);
 
-        data = myDbHelper.queryRepairByDeviceId(deviceId);
         //Log.e("ShadyPi", "getRecord: "+data.size());
         //初始化
         initRepair();
         initDefect();
         initMeasure();
 
+        repairList.setOnItemClickListener((adapterView, v, i, l) -> {
+            Intent intent1 = new Intent(this,AddRepairActivity.class);
+            intent1.putExtra("repairId",String.valueOf(data.get(i).getId()));
+            intent1.putExtra("deviceId",String.valueOf(deviceId));
+            launcher.launch(intent1);
+        });
+
+
+        defectList.setOnItemClickListener((adapterView, v, i, l) -> {
+            Intent intent1 = new Intent(this,AddDefectActivity.class);
+            intent1.putExtra("defectId",String.valueOf(defects.get(i).getId()));
+            intent1.putExtra("deviceId",String.valueOf(deviceId));
+            launcher.launch(intent1);
+        });
+
+        measureList.setOnItemClickListener((adapterView, v, i, l) -> {
+            Intent intent1 = new Intent(this,AddDeviceActivity.class);
+            intent1.putExtra("measureId",String.valueOf(measures.get(i).getId()));
+            intent1.putExtra("deviceId",String.valueOf(deviceId));
+            launcher.launch(intent1);
+        });
         /*动态修改长度*/
 /*        View repairArea = findViewById(R.id.repair_area);
         ViewGroup.LayoutParams params = imformationList1.getLayoutParams();
@@ -170,7 +195,6 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
             measureArea.setVisibility(View.GONE);
         }else{
             measureArea.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
-            ListView measureList = findViewById(R.id.imformationList3);
             MeasureAdapter measureAdapter = new MeasureAdapter(measures,DeviceActivity.this);
             measureList.setAdapter(measureAdapter);
         }
@@ -178,7 +202,6 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initDefect() {
         /*缺陷*/
-        ListView defectList = findViewById(R.id.imformationList2);
         defects = dbHelper.queryDefectByDeviceId(device.getId());
         View defectArea = findViewById(R.id.show2);
         if(defects==null||defects.size()==0){
@@ -192,8 +215,8 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initRepair() {
-        ListView repairList = findViewById(R.id.imformationList1);
         View repairArea = findViewById(R.id.show1);
+        data = dbHelper.queryRepairByDeviceId(device.getId());
         if(data==null||data.size()==0){
             repairArea.setBackgroundColor(Color.parseColor("#e6e2e2"));
             repairArea.setVisibility(View.GONE);
@@ -250,11 +273,13 @@ public class DeviceActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.defect_add:
                 Intent intent2 = new Intent(this,AddDefectActivity.class);
-                intent2.putExtra("deviceId",device.getId());
+                intent2.putExtra("deviceId",String.valueOf(device.getId()));
+                launcher.launch(intent2);
                 break;
             case R.id.measure_add:
                 Intent intent3 = new Intent(this,AddDeviceActivity.class);
-                intent3.putExtra("deviceId",device.getId());
+                intent3.putExtra("deviceId",String.valueOf(device.getId()));
+                launcher.launch(intent3);
                 break;
         }
     }
