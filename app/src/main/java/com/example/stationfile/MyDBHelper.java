@@ -449,7 +449,7 @@ public class MyDBHelper  extends SQLiteOpenHelper {
             device.setStationId(cursor.getInt(1));
             device.setIntervalId(cursor.getInt(2));
             device.setName(cursor.getString(4));
-            device.setState(cursor.getInt(13));
+            device.setState(cursor.getInt(5));
         }
         return device;
     }
@@ -463,7 +463,7 @@ public class MyDBHelper  extends SQLiteOpenHelper {
             device.setStationId(cursor.getInt(1));
             device.setIntervalId(cursor.getInt(2));
             device.setName(cursor.getString(4));
-            device.setState(cursor.getInt(13));
+            device.setState(cursor.getInt(5));
         }
         return device;
     }
